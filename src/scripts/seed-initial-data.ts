@@ -2,11 +2,11 @@ import fs from "fs"
 import StreamArray from "stream-json/streamers/StreamArray"
 import Batch from "stream-json/utils/Batch"
 import 'module-alias/register'
-import * as console from 'console'
 
 import { connectDB } from '@clients/mongodb'
 import { AccountModel } from "@models/account"
 import { TransactionModel } from "@models/transaction"
+import * as process from 'process'
 
 const BATCH_SIZE = 1000;
 
@@ -55,7 +55,7 @@ const processTransactions = async (transactions: JsonBatch<TransactionSeed>[]) =
    for (const { value } of transactions) {
       const existingAccount = await AccountModel.findOne({ email: value.userEmail })
       if (!existingAccount) {
-         console.log("transaction without owner account", value)
+         console.warn("transaction without owner account", value)
          continue
       }
       
@@ -106,6 +106,7 @@ const processTransactions = async (transactions: JsonBatch<TransactionSeed>[]) =
       
       txPipeline.on('end', async () => {
          console.log("seeding transactions finished")
+         process.exit()
       })
    });
 })()

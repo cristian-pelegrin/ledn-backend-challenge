@@ -8,7 +8,7 @@ const router = Router()
 
 router.get(
  "/:id",
- requestValidationMw([param('id').isUUID().withMessage('invalid id param')]),
+ requestValidationMw([param('id').isMongoId().withMessage('invalid id param')]),
  getAccountById
 )
 

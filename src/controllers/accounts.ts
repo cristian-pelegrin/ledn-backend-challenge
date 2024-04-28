@@ -1,13 +1,22 @@
 import { Request, Response } from 'express'
 import { StatusCodes, getReasonPhrase } from "http-status-codes"
 
-export const getAccountById = (req: Request<{ id: string}>, resp: Response)  => {
+import { findAccountById } from '@services/account'
+
+export const getAccountById = async (req: Request<{ id: string}>, resp: Response)  => {
   try {
-     console.log(req.params.id)
-     
-     resp.status(StatusCodes.OK).json({ account: req.params.id })
+     const account = await findAccountById(req.params.id)
+     if (!account) {
+        return resp.status(StatusCodes.NOT_FOUND).send(getReasonPhrase(StatusCodes.NOT_FOUND))
+     }
+     return resp.status(StatusCodes.OK).json({
+        id: account.id,
+        email: account.email,
+        balance: account.balance,
+        updatedAt: account.updatedAt
+     })
   } catch (e) {
-     console.log("Error in getAccountById", e)
-     resp.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
+     console.error("Error in getAccountById", e)
+     return resp.status(StatusCodes.INTERNAL_SERVER_ERROR).send(getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR))
   }
 }
