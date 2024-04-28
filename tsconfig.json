@@ -22,7 +22,9 @@
       "@routes/*": ["./routes/*"],
       "@controllers/*": ["./controllers/*"],
       "@services/*": ["./services/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@models/*": ["./models/*"],
+      "@clients/*": ["./clients/*"]
     }
   }
 }
