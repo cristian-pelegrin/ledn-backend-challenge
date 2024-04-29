@@ -18,3 +18,10 @@ export const connectDB = async () => {
    
    return dbInstance
 }
+
+export const getDbConnection = () => {
+   if (!dbInstance) {
+      throw new Error("Database not connected")
+   }
+   return dbInstance
+}
